@@ -278,7 +278,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d04c41ef5258814898933eb7ec69bc4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bulletObject: {fileID: 7656297286089110845, guid: 1ecbc0aa475a271448fc2d74c058d19d,
+  bulletObject: {fileID: 7656297286089110845, guid: d7efc86696280474983c9654876d9685,
     type: 3}
   transAttack: {fileID: 8678985237430673790}
   waitTimeBullet: 1

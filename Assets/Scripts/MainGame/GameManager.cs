@@ -12,7 +12,7 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private int creepLength = 10;
     [SerializeField]
-    private float waitTimeSpawnCreep = 10f;
+    private float waitTimeSpawnCreep = 5f;
     private bool canSpawnCreep = true;
     void Start()
     {
@@ -31,6 +31,7 @@ public class GameManager : MonoBehaviour
             GameObject temp = Instantiate(creep, creepPoints[0].position, creep.transform.rotation); 
             temp.SetActive(false);
             temp.GetComponent<Creep>().canMove = false;
+            temp.GetComponent<Creep>().canShoot = false;
             creeps.Add(temp);
         }
     }
@@ -46,11 +47,13 @@ public class GameManager : MonoBehaviour
     {
         if (creeps.Count > 0)
         {
+            GameObject temp = creeps[0];
             creeps[0].transform.position = creepPoints[Random.Range(0,2)].position;
             creeps[0].SetActive(true);
             creeps[0].GetComponent<Creep>().canMove = true;
-            StartCoroutine(KillCreep(creeps[0]));
+            creeps[0].GetComponent<Creep>().canShoot = true;
             creeps.Remove(creeps[0]);
+            StartCoroutine(KillCreep(temp));
             canSpawnCreep = false;
             yield return new WaitForSeconds(waitTimeSpawnCreep);
             canSpawnCreep = true;
@@ -58,8 +61,11 @@ public class GameManager : MonoBehaviour
     }
     IEnumerator KillCreep(GameObject obj) 
     {
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(6f);
         creeps.Add(obj);
         obj.SetActive(false);
+        obj.GetComponent<Creep>().setDefaultBullets();
+        yield return new WaitForSeconds(1f);
+        Debug.Log("Disable");
     }
 }

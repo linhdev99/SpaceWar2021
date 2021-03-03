@@ -7,10 +7,10 @@ public class Character : MonoBehaviour
     // Start is called before the first frame update
     public GameObject bulletObject;
     List<GameObject> bullets = new List<GameObject>();
-    List<GameObject> activeBullets = new List<GameObject>();
+    List<GameObject> defaultBullets = new List<GameObject>();
     public Transform transAttack;
     ParticleSystem effect;
-    bool canShoot = true;
+    public bool canShoot = true;
     [SerializeField]
     float waitTimeBullet = 0.05f;
     [SerializeField]
@@ -37,6 +37,7 @@ public class Character : MonoBehaviour
             GameObject temp = Instantiate(bulletObject, transAttack.position, transAttack.rotation);
             temp.SetActive(false);
             bullets.Add(temp);
+            defaultBullets.Add(temp);
         }
     }
     protected void Shoot()
@@ -50,12 +51,13 @@ public class Character : MonoBehaviour
     {
         if (bullets.Count > 0)
         {
+            GameObject temp = bullets[0];
             bullets[0].transform.position = transAttack.transform.position;
             bullets[0].SetActive(true);
             bullets[0].GetComponent<BulletHandler>().canMove = true;
             bullets[0].GetComponent<BulletHandler>().dirBullet = dirBullet;
-            StartCoroutine(KillBullet(bullets[0]));
             bullets.Remove(bullets[0]);
+            StartCoroutine(KillBullet(temp));
             canShoot = false;
             yield return new WaitForSeconds(waitTimeBullet);
             canShoot = true;
@@ -67,5 +69,16 @@ public class Character : MonoBehaviour
         yield return new WaitForSeconds(2f);
         bullets.Add(obj);
         obj.SetActive(false);
+    }
+    public void setDefaultBullets()
+    {
+        bullets.Clear();
+        canShoot = true;
+        foreach (GameObject obj in defaultBullets)
+        {
+            obj.SetActive(false);
+            obj.GetComponent<BulletHandler>().canMove = false;
+            bullets.Add(obj);
+        }
     }
 }
