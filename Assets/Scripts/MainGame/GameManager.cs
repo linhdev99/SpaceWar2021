@@ -24,11 +24,11 @@ public class GameManager : MonoBehaviour
     {
         PoolCreep();
     }
-    void InitCreep() 
+    void InitCreep()
     {
         for (int i = 0; i < creepLength; i++)
         {
-            GameObject temp = Instantiate(creep, creepPoints[0].position, creep.transform.rotation); 
+            GameObject temp = Instantiate(creep, creepPoints[0].position, creep.transform.rotation);
             temp.SetActive(false);
             temp.GetComponent<Creep>().canMove = false;
             temp.GetComponent<Creep>().canShoot = false;
@@ -36,7 +36,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    void PoolCreep() 
+    void PoolCreep()
     {
         if (canSpawnCreep)
         {
@@ -48,7 +48,7 @@ public class GameManager : MonoBehaviour
         if (creeps.Count > 0)
         {
             GameObject temp = creeps[0];
-            creeps[0].transform.position = creepPoints[Random.Range(0,2)].position;
+            creeps[0].transform.position = creepPoints[Random.Range(0, 2)].position;
             creeps[0].SetActive(true);
             creeps[0].GetComponent<Creep>().canMove = true;
             creeps[0].GetComponent<Creep>().canShoot = true;
@@ -59,13 +59,30 @@ public class GameManager : MonoBehaviour
             canSpawnCreep = true;
         }
     }
-    IEnumerator KillCreep(GameObject obj) 
+    IEnumerator KillCreep(GameObject obj)
     {
         yield return new WaitForSeconds(6f);
+        if (obj.activeSelf)
+        {
+            ResetCreep(obj);
+        }
+        yield return new WaitForSeconds(1f);
+    }
+
+    public void ResetCreep(GameObject obj)
+    {
         creeps.Add(obj);
         obj.SetActive(false);
         obj.GetComponent<Creep>().setDefaultBullets();
-        yield return new WaitForSeconds(1f);
-        Debug.Log("Disable");
+    }
+
+    public void IncurDamaged(Character objChar, float value)
+    {
+        objChar.divHealth(value);
+    }
+
+    public void CharacterExplosion(Character objChar, int state)
+    {
+        objChar.CharacterExplosion(state);
     }
 }

@@ -18748,7 +18748,7 @@ GameObject:
   - component: {fileID: 1302012723}
   m_Layer: 8
   m_Name: Shield
-  m_TagString: Untagged
+  m_TagString: Shield
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -18822,7 +18822,7 @@ SphereCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1302012721}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.5
@@ -47167,7 +47167,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 3574d5733ac60b941b175932e0a1aa2e, type: 2}
+  - {fileID: 2100000, guid: 9904c33652e0bb74191ff7a8a676d1c1, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -47237,6 +47237,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _speed: 2
   canMove: 1
+  _deltaSpeed: 1.1
 --- !u!114 &1510364573142580
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -47252,6 +47253,11 @@ MonoBehaviour:
   bulletObject: {fileID: 7656297286089110845, guid: 1ecbc0aa475a271448fc2d74c058d19d,
     type: 3}
   transAttack: {fileID: 1831819254}
+  canShoot: 1
+  waitTimeBullet: 0.05
+  bulletLength: 50
+  healthBase: 10
+  objShield: {fileID: 1302012721}
 --- !u!1 &9075043546311466725
 GameObject:
   m_ObjectHideFlags: 0
@@ -47262,6 +47268,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9071704905413083121}
   - component: {fileID: 9015588667001482503}
+  - component: {fileID: 5746398405154154855}
   m_Layer: 8
   m_Name: Collider4
   m_TagString: Player
@@ -47296,6 +47303,20 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 5.2, y: 0.2, z: 2.5}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &5746398405154154855
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9075043546311466725}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 754f8c94a22a639438bcd65f990c15df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  decreaseDamage: 50
+  isDecreaseDamage: 0
 --- !u!1 &9075142214457303087
 GameObject:
   m_ObjectHideFlags: 0
@@ -47306,6 +47327,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9077591029340275153}
   - component: {fileID: 9012280018239781669}
+  - component: {fileID: 1979970000679838826}
   m_Layer: 8
   m_Name: Collider5
   m_TagString: Player
@@ -47340,6 +47362,20 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.8, y: 0.7, z: 3.3}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1979970000679838826
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9075142214457303087}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 754f8c94a22a639438bcd65f990c15df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  decreaseDamage: 50
+  isDecreaseDamage: 0
 --- !u!1 &9075241939235619989
 GameObject:
   m_ObjectHideFlags: 0
@@ -47350,6 +47386,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9071647812312942647}
   - component: {fileID: 9012311195497612975}
+  - component: {fileID: 1841426294590460850}
   m_Layer: 8
   m_Name: Collider6
   m_TagString: Player
@@ -47384,6 +47421,20 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.8, y: 0.7, z: 3.3}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1841426294590460850
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9075241939235619989}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 754f8c94a22a639438bcd65f990c15df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  decreaseDamage: 50
+  isDecreaseDamage: 0
 --- !u!1 &9075271432923202031
 GameObject:
   m_ObjectHideFlags: 0
@@ -47394,6 +47445,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9071914586002827087}
   - component: {fileID: 9015240529158791737}
+  - component: {fileID: 34410612126469809}
   m_Layer: 8
   m_Name: Collider2
   m_TagString: Player
@@ -47428,6 +47480,20 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.9, y: 0.8, z: 3}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &34410612126469809
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9075271432923202031}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 754f8c94a22a639438bcd65f990c15df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  decreaseDamage: 50
+  isDecreaseDamage: 1
 --- !u!1 &9075832990796671477
 GameObject:
   m_ObjectHideFlags: 0
@@ -47474,6 +47540,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9071501047779825979}
   - component: {fileID: 9015098474084719151}
+  - component: {fileID: 7555500225392572038}
   m_Layer: 8
   m_Name: Collider1
   m_TagString: Player
@@ -47508,6 +47575,20 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 0.7, z: 9}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &7555500225392572038
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9075860532434334543}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 754f8c94a22a639438bcd65f990c15df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  decreaseDamage: 50
+  isDecreaseDamage: 0
 --- !u!1 &9076460204044908567
 GameObject:
   m_ObjectHideFlags: 0
@@ -47518,6 +47599,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9077917259857705711}
   - component: {fileID: 9015163192577470191}
+  - component: {fileID: 4940544668268320097}
   m_Layer: 8
   m_Name: Collider3
   m_TagString: Player
@@ -47552,3 +47634,17 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.9, y: 0.8, z: 3}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &4940544668268320097
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9076460204044908567}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 754f8c94a22a639438bcd65f990c15df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  decreaseDamage: 50
+  isDecreaseDamage: 1

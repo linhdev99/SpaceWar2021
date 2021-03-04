@@ -10,6 +10,10 @@ public class BulletHandler : MonoBehaviour
     public float _speed = 20f;
     [HideInInspector]
     public Vector3 dirBullet;
+    [SerializeField]
+    private float damage = 1f;
+    [SerializeField]
+    private float maxDamage = 100f;
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -26,5 +30,27 @@ public class BulletHandler : MonoBehaviour
     void Move()
     {
         rb.velocity = dirBullet * _speed;
+    }
+    public float getDamage() 
+    {
+        return damage;
+    }
+    public void increaseDamage(float value)
+    {
+        damage += value;
+    }
+    public void decreaseDamage(float value)
+    {
+        damage -= value;
+        damage = Mathf.Clamp(damage, 1f, maxDamage);
+    }
+    public void activeBullet()
+    {
+        StartCoroutine(hideBullet(3f));
+    }
+    IEnumerator hideBullet(float time)
+    {
+        yield return new WaitForSeconds(time);
+        this.gameObject.SetActive(false);
     }
 }

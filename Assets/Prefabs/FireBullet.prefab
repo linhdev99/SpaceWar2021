@@ -9353,7 +9353,7 @@ GameObject:
   - component: {fileID: 2905387708369752056}
   m_Layer: 0
   m_Name: FireBullet
-  m_TagString: Untagged
+  m_TagString: BulletPlayer
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -14126,6 +14126,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   canMove: 0
   _speed: 35
+  dirBullet: {x: 0, y: 0, z: 0}
+  damage: 0.2
+  maxDamage: 100
 --- !u!135 &2905387708369752056
 SphereCollider:
   m_ObjectHideFlags: 0
