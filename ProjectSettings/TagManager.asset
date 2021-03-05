@@ -9,6 +9,8 @@ TagManager:
   - BulletCreep
   - BulletPlayer
   - Shield
+  - WallBottom
+  - WallTop
   layers:
   - Default
   - TransparentFX

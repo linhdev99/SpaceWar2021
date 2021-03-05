@@ -20,4 +20,11 @@ public class Creep : Enemy
         }
         base.Update();
     }
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("WallBottom"))
+        {
+            GM.ResetCreep(this.gameObject);
+        }
+    }
 }

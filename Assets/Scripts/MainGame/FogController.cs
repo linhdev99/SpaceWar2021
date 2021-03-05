@@ -19,7 +19,7 @@ public class FogController : MonoBehaviour
         if (canSpawn)
         {
             canSpawn = false;
-            _speed = Random.Range(60, 90) / 100f;
+            _speed = Random.Range(85, 100) / 100f;
             StartCoroutine(cloudMove(Random.Range(0, clouds.Length)));
         }
     }

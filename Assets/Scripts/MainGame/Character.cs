@@ -12,7 +12,9 @@ public class Character : MonoBehaviour
     ParticleSystem effect;
     public bool canShoot = true;
     [SerializeField]
-    float waitTimeBullet = 0.05f;
+    float waitTimeBullet = 0.5f;
+    [SerializeField]
+    float levelBullet = 1;
     [SerializeField]
     int bulletLength = 50;
     protected Vector3 dirBullet;
@@ -24,14 +26,30 @@ public class Character : MonoBehaviour
     [SerializeField]
     protected GameObject objShield;
     [SerializeField]
-    protected bool increasePower = false;
-    private MeshRenderer mesh;
+    protected bool enabledEffect = false;
+    [SerializeField]
+    private MeshRenderer meshNormal;
+    [SerializeField]
+    private MeshRenderer meshSkin;
+    [SerializeField]
+    private float intensityEffectColor = 3f;
+    protected GameManager GM;
+    [SerializeField]
+    private AudioSource shootAudio;
+    [SerializeField]
+    private AudioSource healingAudio;
+    [SerializeField]
+    private AudioSource upgradeAudio;
+    [SerializeField]
+    private AudioSource hitAudio;
+    [SerializeField]
+    private AudioSource shieldAudio;
     protected virtual void Start()
     {
-        mesh = GetComponent<MeshRenderer>();
+        GM = GameObject.Find("GameManager").GetComponent<GameManager>();
         health = healthBase;
         ShieldState(shieldBlueState);
-        IncreasePower();
+        EffectSpaceship(false);
     }
 
     // Update is called once per frame
@@ -57,6 +75,8 @@ public class Character : MonoBehaviour
     {
         if (canShoot)
         {
+            if (shootAudio.gameObject.activeSelf)
+                shootAudio.Play();
             StartCoroutine(SpawnBullet());
         }
     }
@@ -69,7 +89,7 @@ public class Character : MonoBehaviour
             bullets[0].SetActive(true);
             bullets[0].GetComponent<BulletHandler>().canMove = true;
             bullets[0].GetComponent<BulletHandler>().dirBullet = dirBullet;
-            bullets[0].GetComponent<BulletHandler>().activeBullet();
+            // bullets[0].GetComponent<BulletHandler>().activeBullet();
             bullets.Remove(bullets[0]);
             StartCoroutine(KillBullet(temp));
             canShoot = false;
@@ -108,17 +128,37 @@ public class Character : MonoBehaviour
     public void plusHealth(float value)
     {
         health += value;
+        GM.updateHealthBar(health / healthBase);
     }
     public void divHealth(float value)
     {
-        if (shieldBlueState) return;
+        if (CheckShield()) return;
         health -= value;
         health = Mathf.Clamp(health, 0, healthBase);
-        if (health <= 0)
+        if (this.gameObject.name.Equals("MainPlayer"))
         {
-            GameObject.Find("GameManager").GetComponent<GameManager>().ResetCreep(this.gameObject);
+            GM.updateHealthBar(health / healthBase);
         }
-        Debug.Log(health);
+        if (health <= 0 && !this.gameObject.name.Equals("MainPlayer"))
+        {
+            StopAllCoroutines();
+            GM.increaseScore(1);
+            GM.ResetCreep(this.gameObject);
+        }
+        if (health <= 0 && this.gameObject.name.Equals("MainPlayer"))
+        {
+            GM.GameOver();
+        }
+        // Debug.Log(health);
+    }
+    public bool CheckShield()
+    {
+        if (shieldBlueState)
+        {
+            ShieldState(false);
+            return true;
+        }
+        return false;
     }
     public bool isDeath()
     {
@@ -145,7 +185,10 @@ public class Character : MonoBehaviour
     }
     public void ShieldState(bool state)
     {
+        shieldBlueState = state;
         objShield.SetActive(state);
+        if (state) shieldAudio.Play();
+        else shieldAudio.Stop();
     }
     public void CharacterExplosion(int state)
     {
@@ -155,42 +198,111 @@ public class Character : MonoBehaviour
             case 0:
                 {
                     Debug.Log("Player death");
+                    GM.GameOver();
                     break;
                 }
             case 1:
                 {
-                    GameObject.Find("GameManager").GetComponent<GameManager>().ResetCreep(this.gameObject);
+                    GM.increaseScore(1);
+                    GM.ResetCreep(this.gameObject);
                     break;
                 }
             default:
                 break;
         }
     }
-    public void IncreasePower()
+    public void EffectSpaceship(bool state)
     {
-
-        if (increasePower)
+        enabledEffect = state;
+        if (state)
         {
-            mesh.sharedMaterial.SetInt("_EmissionEffect", 1);
+            meshSkin.sharedMaterial.SetInt("_EmissionEffect", 1);
+            meshSkin.enabled = true;
+            meshNormal.enabled = false;
             StartCoroutine(spaceshipEmissionEffect());
         }
         else
         {
-            mesh.sharedMaterial.SetInt("_EmissionEffect", 0);
+            healingAudio.Stop();
+            // upgradeAudio.Stop();
+            meshSkin.sharedMaterial.SetInt("_EmissionEffect", 0);
+            meshNormal.enabled = true;
+            meshSkin.enabled = false;
         }
     }
 
     IEnumerator spaceshipEmissionEffect()
     {
         float angle = 0;
-        while (increasePower)
+        while (enabledEffect)
         {
-            float temp = 1.2f * Mathf.Sin(angle * Mathf.PI / 180.0f);
-            temp = Mathf.Clamp(temp, -0.8f, 1.15f);
-            angle += 10f;
+            float temp = 0.275f * Mathf.Sin(angle * Mathf.PI / 180.0f) + 0.875f;
+            temp = Mathf.Clamp(temp, 0.6f, 1.15f);
+            angle += 30f;
             if (angle > 360) angle = 0;
-            mesh.sharedMaterial.SetFloat("_FresnelEffect", temp);
+            meshSkin.sharedMaterial.SetFloat("_FresnelEffect", temp);
             yield return new WaitForSeconds(Time.deltaTime);
+        }
+    }
+
+    public void StartEffectHurt()
+    {
+        StartCoroutine(EffectHurt());
+    }
+    public void StartEffectHealing()
+    {
+        StartCoroutine(EffectHealing());
+    }
+    public void StartEffectUpdateSpaceship()
+    {
+        StartCoroutine(EffectUpdateSpaceship());
+    }
+
+    protected IEnumerator EffectHurt()
+    {
+        EffectSpaceship(true);
+        hitAudio.Play();
+        spaceshipEmissionEffect();
+        float factor = Mathf.Pow(2, intensityEffectColor);
+        Color color = new Color(factor * 191f / 255f, factor * 9f / 255f, 0f, 1f);
+        meshSkin.sharedMaterial.SetColor("_EmissionColor", color);
+        yield return new WaitForSeconds(0.15f);
+        EffectSpaceship(false);
+    }
+    protected IEnumerator EffectHealing()
+    {
+        EffectSpaceship(true);
+        healingAudio.Play();
+        spaceshipEmissionEffect();
+        float factor = Mathf.Pow(2, intensityEffectColor);
+        Color color = new Color(0f, factor * 191f / 255f, factor * 65f / 255f, 1f);
+        meshSkin.sharedMaterial.SetColor("_EmissionColor", color);
+        while (enabledEffect && health < healthBase)
+        {
+            plusHealth(0.1f);
+            yield return new WaitForSeconds(Time.deltaTime);
+        }
+        EffectSpaceship(false);
+    }
+    protected IEnumerator EffectUpdateSpaceship()
+    {
+        EffectSpaceship(true);
+        upgradeAudio.Play();
+        spaceshipEmissionEffect();
+        float factor = Mathf.Pow(2, intensityEffectColor);
+        Color color = new Color(0f, factor * 79f / 255f, factor * 191f / 255f, 1f);
+        meshSkin.sharedMaterial.SetColor("_EmissionColor", color);
+        yield return new WaitForSeconds(1f);
+        EffectSpaceship(false);
+    }
+
+    public void increaseBulletDamage()
+    {
+        levelBullet += 0.25f;
+        if (levelBullet <= 3)
+        {
+            StartEffectUpdateSpaceship();
+            waitTimeBullet = 0.5f / levelBullet;
         }
     }
 }

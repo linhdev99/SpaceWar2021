@@ -14,6 +14,7 @@ public class PlayerDamageIncurred : MonoBehaviour
         Character objChar = transform.parent.gameObject.transform.parent.gameObject.GetComponent<Character>();
         if (other.gameObject.CompareTag("BulletCreep"))
         {
+            this.gameObject.transform.parent.transform.parent.gameObject.GetComponent<Character>().StartEffectHurt();
             if (isDecreaseDamage)
             {
                 GM.IncurDamaged(objChar, other.gameObject.GetComponent<BulletHandler>().getDamage() * (decreaseDamage / 100f));
@@ -22,6 +23,7 @@ public class PlayerDamageIncurred : MonoBehaviour
             {
                 GM.IncurDamaged(objChar, other.gameObject.GetComponent<BulletHandler>().getDamage());
             }
+            other.gameObject.SetActive(false);
         }
         if (other.gameObject.CompareTag("Creep"))
         {

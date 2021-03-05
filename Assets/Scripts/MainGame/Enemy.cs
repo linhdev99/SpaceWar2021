@@ -11,13 +11,14 @@ public class Enemy : Character
         rb = GetComponent<Rigidbody>();
         dirBullet = transform.forward;
         InitBullet();
+        Shoot();
         base.Start();
     }
 
     // Update is called once per frame
     protected override void Update()
     {
-        Shoot();
+        //Shoot();
         base.Update();
     }
     protected override void FixedUpdate()

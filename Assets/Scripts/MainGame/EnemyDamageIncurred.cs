@@ -14,6 +14,7 @@ public class EnemyDamageIncurred : MonoBehaviour
         Character objChar = transform.parent.gameObject.transform.parent.gameObject.GetComponent<Character>();
         if (other.gameObject.CompareTag("BulletPlayer"))
         {
+            this.gameObject.transform.parent.transform.parent.gameObject.GetComponent<Character>().StartEffectHurt();
             if (isDecreaseDamage)
             {
                 GM.IncurDamaged(objChar, other.gameObject.GetComponent<BulletHandler>().getDamage() * (decreaseDamage / 100f));
@@ -22,10 +23,12 @@ public class EnemyDamageIncurred : MonoBehaviour
             {
                 GM.IncurDamaged(objChar, other.gameObject.GetComponent<BulletHandler>().getDamage());
             }
+            other.gameObject.SetActive(false);
         }
-        if (other.gameObject.CompareTag("Player"))
+        if (other.gameObject.CompareTag("Shield"))
         {
             GM.CharacterExplosion(objChar, 1);
+            other.gameObject.SetActive(false);
         }
     }
 }

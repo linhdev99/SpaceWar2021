@@ -31,7 +31,7 @@ public class BulletHandler : MonoBehaviour
     {
         rb.velocity = dirBullet * _speed;
     }
-    public float getDamage() 
+    public float getDamage()
     {
         return damage;
     }
@@ -44,13 +44,25 @@ public class BulletHandler : MonoBehaviour
         damage -= value;
         damage = Mathf.Clamp(damage, 1f, maxDamage);
     }
-    public void activeBullet()
+    private void OnTriggerEnter(Collider other)
     {
-        StartCoroutine(hideBullet(3f));
+        if (other.gameObject.CompareTag("WallTop") || other.gameObject.CompareTag("WallBottom"))
+        {
+            this.gameObject.SetActive(false);
+        }
+        if (other.gameObject.CompareTag("Shield"))
+        {
+            GameObject.Find("MainPlayer").GetComponent<Character>().CheckShield();
+            this.gameObject.SetActive(false);
+        }
     }
-    IEnumerator hideBullet(float time)
-    {
-        yield return new WaitForSeconds(time);
-        this.gameObject.SetActive(false);
-    }
+    // public void activeBullet()
+    // {
+    //     StartCoroutine(hideBullet(3f));
+    // }
+    // IEnumerator hideBullet(float time)
+    // {
+    //     yield return new WaitForSeconds(time);
+    //     this.gameObject.SetActive(false);
+    // }
 }

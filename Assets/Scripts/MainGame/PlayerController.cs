@@ -5,11 +5,10 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     // Start is called before the first frame update
-    [SerializeField] private float _speed;
     [HideInInspector] public bool canMove = true;
     private Rigidbody rb;
     [SerializeField]
-    private float _deltaSpeed = 1.1f;
+    private float _deltaSpeed = 0.1f;
     private Vector2 startPos;
     private Vector2 direction;
     Vector2 cur;
@@ -81,8 +80,8 @@ public class PlayerController : MonoBehaviour
         {
             RightShip();
         }
-        float newX = transform.position.x + dir.x * _deltaSpeed;
-        float newY = transform.position.y + dir.y * _deltaSpeed;
+        float newX = transform.position.x + dir.x * (1f + _deltaSpeed);
+        float newY = transform.position.y + dir.y * (1f + _deltaSpeed);
         if (newX < -8.2f) newX = -8.2f;
         if (newX > 8.2f) newX = 8.2f;
         if (newY < -15f) newY = -15f;
